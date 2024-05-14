@@ -1,8 +1,10 @@
 const mongoose = require('mongoose');
+const {generateNextId} = require("../utils/Helper");
 const Schema = mongoose.Schema;
 
 // Define User schema
 const userSchema = new Schema({
+    _id: { type: String, default: () => { return generateNextId(); }},
     name: String,
     email: { type: String, unique: true },
     password: String,
@@ -96,6 +98,10 @@ const Order = mongoose.model('Order', orderSchema);
 const Banner = mongoose.model('Banner', bannerSchema);
 const Review = mongoose.model('Review', reviewSchema);
 const ShoppingCart = mongoose.model('ShoppingCart', shoppingCartSchema);
+
+
+
+
 
 module.exports = {
     User,
