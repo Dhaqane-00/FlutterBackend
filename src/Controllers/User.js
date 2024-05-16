@@ -26,7 +26,7 @@ exports.createUser = async (req, res) => {
         });
 
         // Generate JWT token
-        const token = jwt.sign({ userId: user._id,name :name, email:email }, 'ShopStream', { expiresIn: '1h' });
+        const token = jwt.sign({ userId: user._id,name :name, email:email ,role:role}, process.env.JWT_SECRET, { expiresIn: '1D' });
 
         return res.status(201).json({
             message: "User created successfully",
@@ -57,8 +57,15 @@ exports.GetUser = async (req, res) => {
             return res.status(400).json({ message: "Invalid password" });
         }
 
+        // Assuming `existingUser` contains the role information
+        const { role } = existingUser;
+
         // Generate JWT token
-        const token = jwt.sign({ email:email,password:password }, 'ShopStream', { expiresIn: '1h' });
+        const token = jwt.sign(
+            { userId: existingUser._id, email: email, role: role }, // Include role here
+            process.env.JWT_SECRET,
+            { expiresIn: '1D' }
+        );
 
         return res.status(200).json({
             message: "User authenticated successfully",
@@ -73,6 +80,7 @@ exports.GetUser = async (req, res) => {
         return res.status(500).json({ message: "Server error" });
     }
 };
+
 
 
 exports.getAllUsers = async (req, res) => {

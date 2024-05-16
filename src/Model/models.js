@@ -1,14 +1,15 @@
 const mongoose = require('mongoose');
-const {generateNextId} = require("../utils/Helper");
 const Schema = mongoose.Schema;
 
 // Define User schema
 const userSchema = new Schema({
-    _id: { type: String, default: () => { return generateNextId(); }},
     name: String,
     email: { type: String, unique: true },
     password: String,
-    photo: String,
+    photo: {
+        type: String,
+        default: "default_photo_url_here"
+    },
     role: {
         type: String,
         enum: ["admin", "user"],
@@ -72,15 +73,6 @@ const bannerSchema = new Schema({
     createdAt: { type: Date, default: Date.now }
 });
 
-// Define Review schema
-const reviewSchema = new Schema({
-    product: { type: Schema.Types.ObjectId, ref: 'Product' }, // Reference to Product model
-    user: { type: Schema.Types.ObjectId, ref: 'User' }, // Reference to User model
-    rating: Number,
-    comment: String,
-    datePosted: { type: Date, default: Date.now }
-});
-
 // Define ShoppingCart schema
 const shoppingCartSchema = new Schema({
     user: { type: Schema.Types.ObjectId, ref: 'User' }, // Reference to User model
@@ -96,7 +88,6 @@ const Product = mongoose.model('Product', productSchema);
 const Payment = mongoose.model('Payment', paymentSchema);
 const Order = mongoose.model('Order', orderSchema);
 const Banner = mongoose.model('Banner', bannerSchema);
-const Review = mongoose.model('Review', reviewSchema);
 const ShoppingCart = mongoose.model('ShoppingCart', shoppingCartSchema);
 
 
@@ -110,6 +101,5 @@ module.exports = {
     Payment,
     Order,
     Banner,
-    Review,
     ShoppingCart
 };
