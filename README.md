@@ -7,7 +7,7 @@ This project serves as the backend for a Flutter application. It is built using 
 
 Table of Contents
 
-    Installation
+    Installation   
     Usage
     Dependencies
     Dev Dependencies
@@ -19,6 +19,8 @@ Installation
 To get started with this project, follow these steps:
 
     Clone the repository: git clone https://github.com/Dhaqane-00/FlutterBackend.git
+
+    
 
     Navigate to the project directory:
 
