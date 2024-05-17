@@ -1,10 +1,10 @@
-const { Product } = require('../Model/models');
+const { Product, Category } = require('../Model/models');
 const jwt = require('jsonwebtoken');
 
 exports.CreateProduct = async (req, res) => {
     try {
         // Extract product details from the request body
-        const { name, description, images, price, salePrice, salePriceDate, isTrending, units, category } = req.body;
+        const { name, description, images, price, salePrice, salePriceDate, isTrending, units, categoryId } = req.body;
 
         // Extract the token from the request headers
         const token = req.headers.authorization && req.headers.authorization.split(' ')[1];
@@ -26,6 +26,12 @@ exports.CreateProduct = async (req, res) => {
         if (decodedToken.role !== 'admin') {
             return res.status(403).json({ success: false, message: 'Only admin users can create products' });
         }
+        const category = await Category.findById(categoryId);
+        console.log(category)
+        // Check if the product exists
+        if (!category) {
+            return res.status(404).json({ success: false, message: 'Category not found' });
+        }
 
         // Create a new product instance
         const product = new Product({
@@ -37,7 +43,7 @@ exports.CreateProduct = async (req, res) => {
             salePriceDate,
             isTrending,
             units,
-            category,
+            category: categoryId,
             createdBy: decodedToken.userId,
             createdAt: new Date()
         });
