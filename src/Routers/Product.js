@@ -97,7 +97,7 @@ Product.post ("/createProduct", CreateProduct);
  *         categoryId:
  *           type: string
  *           description: The ID of the category to which the product belongs
- *           example: "category123"
+ *           example: "ObjectID(60a0e5c5e7ad21438c6f4c82)"
  *
  *     ProductResponse:
  *       type: object

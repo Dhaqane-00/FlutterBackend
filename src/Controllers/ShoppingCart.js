@@ -1,7 +1,7 @@
 const { ShoppingCart,Product } = require('../Model/models');
 const jwt = require('jsonwebtoken');
 
-exports.createShoppingCart = async (req, res) => {
+exports.createShopping = async (req, res) => {
     try {
         // Extract shopping cart details from the request body
         const { productId, quantity } = req.body;
@@ -45,13 +45,13 @@ exports.createShoppingCart = async (req, res) => {
     }
 };
 
-exports.updateShoppingCart = async (req, res) => {
+exports.updateShopping = async (req, res) => {
     try {
-        const shoppingCartItemId = req.params.Id;
+        const id = req.params.id;
         const { quantity } = req.body;
 
         // Check if the shopping cart item exists
-        const shoppingCartItem = await ShoppingCart.findById(shoppingCartItemId);
+        const shoppingCartItem = await ShoppingCart.findById(id);
         if (!shoppingCartItem) {
             return res.status(404).json({ success: false, message: 'Shopping cart item not found' });
         }
@@ -70,7 +70,7 @@ exports.updateShoppingCart = async (req, res) => {
     }
 };
 
-exports.getAllShoppingCart = async (req, res) => {
+exports.getAllShopping= async (req, res) => {
     try {
         // Fetch all shopping cart items from the database
         const shoppingCartItems = await ShoppingCart.find();
@@ -84,12 +84,13 @@ exports.getAllShoppingCart = async (req, res) => {
 };
 
 
-exports.deleteShoppingCartItemById = async (req, res) => {
+exports.deleteShopping = async (req, res) => {
     try {
-        const shoppingCartItemId = req.params.Id;
+        const shoppingCartItemId = req.params.id;
 
         // Check if the shopping cart item exists
         const existingShoppingCartItem = await ShoppingCart.findById(shoppingCartItemId);
+        console.log(existingShoppingCartItem);
         if (!existingShoppingCartItem) {
             return res.status(404).json({ success: false, message: 'Shopping cart item not found' });
         }

@@ -58,7 +58,7 @@ exports.getAllBanners = async (req, res) => {
 
 exports.updateBanner = async (req, res) => {
     try {
-        const bannerId = req.params;
+        const bannerId = req.params.id;
         const { name, description, image } = req.body;
 
         // Check if the banner exists

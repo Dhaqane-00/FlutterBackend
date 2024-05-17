@@ -91,7 +91,9 @@ exports.getOrderById = async (req, res) => {
 exports.updateOrder = async (req, res) => {
     try {
 
-        const { orderId, productId, categoryId, paymentMethodId, status, description, quantity, total } = req.body;
+        const { productId, categoryId, paymentMethodId, status, description, quantity, total } = req.body;
+
+        const orderId = req.params.Id;
 
         // Fetch the order from the database
         const existingOrder = await Order.findById(orderId);
