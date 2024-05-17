@@ -15,13 +15,13 @@ Installation
 
 To get started with this project, follow these steps:
 
-    Clone the repository: git clone https://github.com/your-username/flutter_backend.git
+    Clone the repository: git clone https://github.com/Dhaqane-00/FlutterBackend.git
 
-    bash Navigate to the project directory:
+    Navigate to the project directory:
 
-    bash cd flutter_backend Install the dependencies:
+    cd flutter_backend Install the dependencies:
 
-    bash npm install
+    npm install
 
     Create a .env file in the root of the project and add your environment variables:
 
@@ -35,7 +35,7 @@ Usage
 
 To start the server in development mode, use the following command:
 
-bash npm start
+     npm start
 
 This will use nodemon to watch for file changes and automatically restart the server.
 Dependencies
@@ -63,9 +63,7 @@ License
 This project is licensed under the ISC License.
 API Documentation
 
-The API documentation is generated using Swagger. Once the server is running, you can access the documentation at:
-
-bash  
+The API documentation is generated using Swagger. Once the server is running, you can access the documentation at:  
 
     http://localhost:5000/api-docs
 
