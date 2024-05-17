@@ -1,4 +1,4 @@
-const {Category} = require('../Model/models');
+const { Category } = require('../Model/models');
 const jwt = require('jsonwebtoken');
 
 exports.CreateCategory = async (req, res) => {
@@ -24,6 +24,12 @@ exports.CreateCategory = async (req, res) => {
         // Check if the user is an admin
         if (decodedToken.role !== 'admin') {
             return res.status(403).json({ success: false, message: 'Only root user can create categories' });
+        }
+        // Check if a category with the same name already exists
+        const existingCategory = await Category.findOne({ name });
+
+        if (existingCategory) {
+            return res.status(400).json({ success: false, message: 'Category already exists' });
         }
 
         // Create a new category instance
@@ -63,7 +69,7 @@ exports.UpdateCategory = async (req, res) => {
     try {
         // Extract category details from the request body
         const { name, description, photo } = req.body;
-        
+
         // Extract category ID from the request parameters
         const categoryId = req.params.id;
 
@@ -155,7 +161,7 @@ exports.DeleteCategory = async (req, res) => {
         // Delete the category from the database
         await Category.findByIdAndDelete(categoryId);
 
-        res.status(200).json({ success: true, message: 'Category deleted successfully' ,Date: category});
+        res.status(200).json({ success: true, message: 'Category deleted successfully', Date: category });
     } catch (error) {
         console.error('Error deleting category:', error);
         res.status(500).json({ success: false, message: 'Failed to delete category', error: error.message });

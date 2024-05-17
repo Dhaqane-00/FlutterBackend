@@ -16,6 +16,37 @@ const userSchema = new Schema({
         default: "user"
     }
 });
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     User:
+ *       type: object
+ *       properties:
+ *         _id:
+ *           type: string
+ *           description: Unique identifier for the user
+ *         name:
+ *           type: string
+ *           description: Name of the user
+ *         email:
+ *           type: string
+ *           description: Email address of the user
+ *           unique: true
+ *         password:
+ *           type: string
+ *           description: Password for the user
+ *         photo:
+ *           type: string
+ *           description: URL of the user's photo
+ *           default: "default_photo_url_here"
+ *         role:
+ *           type: string
+ *           description: Role of the user
+ *           enum: ["admin", "user"]
+ *           default: "user"
+ */
+
 
 // Define Category schema
 const categorySchema = new Schema({
@@ -25,6 +56,34 @@ const categorySchema = new Schema({
     createdBy: { type: Schema.Types.ObjectId, ref: 'User' }, // Reference to User model
     createdAt: { type: Date, default: Date.now }
 });
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Category:
+ *       type: object
+ *       properties:
+ *         _id:
+ *           type: string
+ *           description: Unique identifier for the category
+ *         name:
+ *           type: string
+ *           description: Name of the category
+ *         description:
+ *           type: string
+ *           description: Description of the category
+ *         photo:
+ *           type: string
+ *           description: URL of the category's photo
+ *         createdBy:
+ *           type: string
+ *           description: Reference to the user who created the category
+ *         createdAt:
+ *           type: string
+ *           format: date-time
+ *           description: Date and time when the category was created
+ */
+
 
 // Define Product schema
 const productSchema = new Schema({
@@ -40,6 +99,54 @@ const productSchema = new Schema({
     createdBy: { type: Schema.Types.ObjectId, ref: 'User' }, // Reference to User model
     createdAt: { type: Date, default: Date.now }
 });
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Product:
+ *       type: object
+ *       properties:
+ *         _id:
+ *           type: string
+ *           description: Unique identifier for the product
+ *         name:
+ *           type: string
+ *           description: Name of the product
+ *         description:
+ *           type: string
+ *           description: Description of the product
+ *         images:
+ *           type: array
+ *           items:
+ *             type: string
+ *           description: Array of image URLs for the product
+ *         price:
+ *           type: number
+ *           description: Price of the product
+ *         salePrice:
+ *           type: number
+ *           description: Sale price of the product
+ *         salePriceDate:
+ *           type: string
+ *           format: date-time
+ *           description: Date when the sale price is applicable
+ *         isTrending:
+ *           type: boolean
+ *           description: Indicates if the product is trending
+ *         units:
+ *           type: number
+ *           description: Number of units available
+ *         category:
+ *           type: string
+ *           description: Reference to the category of the product
+ *         createdBy:
+ *           type: string
+ *           description: Reference to the user who created the product
+ *         createdAt:
+ *           type: string
+ *           format: date-time
+ *           description: Date and time when the product was created
+ */
 
 // Define Payment schema
 const paymentSchema = new Schema({
@@ -49,6 +156,33 @@ const paymentSchema = new Schema({
     createdBy: { type: Schema.Types.ObjectId, ref: 'User' }, // Reference to User model
     createdAt: { type: Date, default: Date.now }
 });
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Payment:
+ *       type: object
+ *       properties:
+ *         _id:
+ *           type: string
+ *           description: Unique identifier for the payment
+ *         name:
+ *           type: string
+ *           description: Name of the payment method
+ *         description:
+ *           type: string
+ *           description: Description of the payment method
+ *         type:
+ *           type: string
+ *           description: Type of payment method (e.g., Credit Card, PayPal)
+ *         createdBy:
+ *           type: string
+ *           description: Reference to the user who created the payment method
+ *         createdAt:
+ *           type: string
+ *           format: date-time
+ *           description: Date and time when the payment method was created
+ */
 
 // Define Order schema
 const orderSchema = new Schema({
@@ -63,6 +197,48 @@ const orderSchema = new Schema({
     createdBy: { type: Schema.Types.ObjectId, ref: 'User' }, // Reference to User model
     createdAt: { type: Date, default: Date.now }
 });
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Order:
+ *       type: object
+ *       properties:
+ *         _id:
+ *           type: string
+ *           description: Unique identifier for the order
+ *         product:
+ *           type: string
+ *           description: Reference to the product in the order
+ *         category:
+ *           type: string
+ *           description: Reference to the category of the product in the order
+ *         user:
+ *           type: string
+ *           description: Reference to the user who placed the order
+ *         paymentMethod:
+ *           type: string
+ *           description: Reference to the payment method used for the order
+ *         status:
+ *           type: string
+ *           description: Status of the order
+ *         description:
+ *           type: string
+ *           description: Description of the order
+ *         quantity:
+ *           type: number
+ *           description: Quantity of the product ordered
+ *         total:
+ *           type: number
+ *           description: Total price of the order
+ *         createdBy:
+ *           type: string
+ *           description: Reference to the user who created the order
+ *         createdAt:
+ *           type: string
+ *           format: date-time
+ *           description: Date and time when the order was created
+ */
 
 // Define Banner schema
 const bannerSchema = new Schema({
@@ -72,6 +248,33 @@ const bannerSchema = new Schema({
     createdBy: { type: Schema.Types.ObjectId, ref: 'User' }, // Reference to User model
     createdAt: { type: Date, default: Date.now }
 });
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Banner:
+ *       type: object
+ *       properties:
+ *         _id:
+ *           type: string
+ *           description: Unique identifier for the banner
+ *         name:
+ *           type: string
+ *           description: Name of the banner
+ *         description:
+ *           type: string
+ *           description: Description of the banner
+ *         image:
+ *           type: string
+ *           description: URL of the banner image
+ *         createdBy:
+ *           type: string
+ *           description: Reference to the user who created the banner
+ *         createdAt:
+ *           type: string
+ *           format: date-time
+ *           description: Date and time when the banner was created
+ */
 
 // Define ShoppingCart schema
 const shoppingCartSchema = new Schema({
@@ -80,7 +283,30 @@ const shoppingCartSchema = new Schema({
     quantity: Number,
     createdAt: { type: Date, default: Date.now }
 });
-
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     ShoppingCart:
+ *       type: object
+ *       properties:
+ *         _id:
+ *           type: string
+ *           description: Unique identifier for the shopping cart item
+ *         user:
+ *           type: string
+ *           description: Reference to the user who owns the shopping cart
+ *         product:
+ *           type: string
+ *           description: Reference to the product in the shopping cart
+ *         quantity:
+ *           type: number
+ *           description: Quantity of the product in the shopping cart
+ *         createdAt:
+ *           type: string
+ *           format: date-time
+ *           description: Date and time when the shopping cart item was created
+ */
 // Create models
 const User = mongoose.model('User', userSchema);
 const Category = mongoose.model('Category', categorySchema);
