@@ -1,12 +1,74 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Backend Starter System</title>
-  </head>
-  <body>
-    <h1>PUBLIC PAGE SERVER</h1>
-  </body>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User List</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .user-container {
+            display: flex;
+            flex-wrap: wrap;
+        }
+        .user-card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 16px;
+            margin: 8px;
+            width: 200px;
+            text-align: center;
+        }
+        .user-card img {
+            border-radius: 50%;
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+        }
+    </style>
+</head>
+<body>
+    <h1>User List</h1>
+    <div class="user-container" id="user-container">
+        <!-- User cards will be injected here -->
+    </div>
+
+    <script>
+        async function fetchUsers() {
+            try {
+                const response = await fetch('/api/user/getAllUsers'); // Adjust the URL to your API endpoint
+                const result = await response.json();
+                if (response.ok) {
+                    displayUsers(result.data);
+                    console.log(response.data);
+                } else {
+                    console.error(result.message);
+                    alert('Failed to load users');
+                }
+            } catch (error) {
+                console.error('Error fetching users:', error);
+                alert('Error fetching users');
+            }
+        }
+
+        function displayUsers(users) {
+            const container = document.getElementById('user-container');
+            container.innerHTML = ''; // Clear existing content
+            users.forEach(user => {
+                const userCard = document.createElement('div');
+                userCard.className = 'user-card';
+                userCard.innerHTML = `
+                    <img src="${user.photoUrl}" alt="${user.name}'s photo">
+                    <h3>${user.name}</h3>
+                    <p>${user.email}</p>
+                `;
+                container.appendChild(userCard);
+            });
+        }
+
+        // Fetch users on page load
+        window.onload = fetchUsers;
+    </script>
+</body>
 </html>

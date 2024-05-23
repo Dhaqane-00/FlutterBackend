@@ -8,13 +8,14 @@ const userSchema = new Schema({
     password: String,
     photo: {
         type: String,
-        default: "default_photo_url_here"
+        default: "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
     },
     role: {
         type: String,
         enum: ["admin", "user"],
         default: "user"
-    }
+    },
+    verify: { type: Boolean, default: false },
 });
 /**
  * @swagger
@@ -47,7 +48,12 @@ const userSchema = new Schema({
  *           default: "user"
  */
 
-
+const userOTP = new Schema({
+    userid: { type: Schema.Types.ObjectId, ref: 'User' }, 
+    otp: String, 
+    createdAt: { type: Date, default: Date.now },
+    expiresAt: { type: Date, default: Date.now }
+})
 // Define Category schema
 const categorySchema = new Schema({
     name: String,
@@ -309,6 +315,7 @@ const shoppingCartSchema = new Schema({
  */
 // Create models
 const User = mongoose.model('User', userSchema);
+const UserOTP = mongoose.model('UserOTP', userOTP);
 const Category = mongoose.model('Category', categorySchema);
 const Product = mongoose.model('Product', productSchema);
 const Payment = mongoose.model('Payment', paymentSchema);
@@ -322,6 +329,7 @@ const ShoppingCart = mongoose.model('ShoppingCart', shoppingCartSchema);
 
 module.exports = {
     User,
+    UserOTP,
     Category,
     Product,
     Payment,

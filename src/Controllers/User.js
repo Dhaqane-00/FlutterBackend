@@ -3,7 +3,8 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
 exports.createUser = async (req, res) => {
-    const { name, email, password, photo, role } = req.body;
+    const { name, email, password, role } = req.body;
+    const photo = req.file ? req.file.filename : null;
 
     try {
         // Check if user exists
@@ -22,16 +23,17 @@ exports.createUser = async (req, res) => {
             email,
             password: hashedPassword,
             photo,
-            role
+            role,
+            verify: false
         });
 
         // Generate JWT token
-        const token = jwt.sign({ userId: user._id,name :name, email:email ,role:role}, process.env.JWT_SECRET, { expiresIn: '1D' });
+        const token = jwt.sign({ userId: user._id, name, email, role }, process.env.JWT_SECRET, { expiresIn: '1D' });
 
         return res.status(201).json({
-            message: "User created successfully",
+            message: "user created successfully",
             data: {
-                user,
+                ...user._doc,
                 token
             },
         });
@@ -68,9 +70,9 @@ exports.GetUser = async (req, res) => {
         );
 
         return res.status(200).json({
-            message: "User authenticated successfully",
+            message: "user Login successfully",
             data: {
-                user: existingUser,
+                ...existingUser._doc,
                 token
             }
         });

@@ -1,10 +1,11 @@
 const express = require("express");
+const upload = require("../utils/upload");
 const user = express.Router();
 
 const {createUser,GetUser,getAllUsers,updateUser,deleteUser} = require('../Controllers/User')
 
 
-user.post("/createUser", createUser);
+user.post("/createUser",upload.single("photo"), createUser);
 /**
  * @swagger
  * /api/user/createUser:
@@ -14,7 +15,7 @@ user.post("/createUser", createUser);
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
+ *         multipart/form-data:
  *           schema:
  *             type: object
  *             properties:
@@ -33,12 +34,12 @@ user.post("/createUser", createUser);
  *                 example: mypassword
  *               photo:
  *                 type: string
- *                 description: The URL of the user's photo
- *                 example: http://example.com/profile.jpg
+ *                 format: binary
+ *                 description: The user's photo file
  *               role:
  *                 type: string
  *                 description: The role of the user
- *                 enum: [admin, user] # Update with your roles
+ *                 enum: [admin, user]
  *                 example: user
  *     responses:
  *       201:
