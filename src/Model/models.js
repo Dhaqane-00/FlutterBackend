@@ -16,6 +16,8 @@ const userSchema = new Schema({
         default: "user"
     },
     verify: { type: Boolean, default: false },
+    otp: String,
+    otpExpires: Date
 });
 /**
  * @swagger

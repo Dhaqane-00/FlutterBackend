@@ -2,7 +2,7 @@ const express = require("express");
 const upload = require("../utils/upload");
 const user = express.Router();
 
-const {createUser,GetUser,getAllUsers,updateUser,deleteUser} = require('../Controllers/User')
+const {createUser,OTPVerification,verifyOTP,GetUser,getAllUsers,forgotPassword,resetPassword,updateUser,deleteUser} = require('../Controllers/User')
 
 
 user.post("/createUser",upload.single("photo"), createUser);
@@ -77,6 +77,7 @@ user.post("/createUser",upload.single("photo"), createUser);
  *         description: Internal server error
  */
 
+user.post("/verifyOTP",verifyOTP);
 
 user.post("/GetUser", GetUser);
 /**
@@ -172,6 +173,9 @@ user.get("/getAllUsers", getAllUsers);
  *       500:
  *         description: Internal server error
  */
+user.post("/forgotPassword",forgotPassword);
+
+user.post("/resetPassword",resetPassword);
 
 user.patch("/UpdateUser/:id",updateUser);
 /**
