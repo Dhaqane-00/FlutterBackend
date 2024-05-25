@@ -102,6 +102,8 @@ const productSchema = new Schema({
     salePrice: Number,
     salePriceDate: Date,
     isTrending: Boolean,
+    isFavourite: Boolean,
+    rating: Number,
     units: Number,
     category: { type: Schema.Types.ObjectId, ref: 'Category' }, // Reference to Category model
     createdBy: { type: Schema.Types.ObjectId, ref: 'User' }, // Reference to User model

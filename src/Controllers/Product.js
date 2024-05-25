@@ -42,6 +42,8 @@ exports.CreateProduct = async (req, res) => {
             salePrice,
             salePriceDate,
             isTrending,
+            isFavourite,
+            rating,
             units,
             category: categoryId,
             createdBy: decodedToken.userId,
