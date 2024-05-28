@@ -1,8 +1,9 @@
 const express = require('express');
 const Product = express.Router();
+const upload = require("../utils/upload");
 const {CreateProduct,getAllProducts,updateProduct,deleteProduct} = require('../Controllers/Product')
 
-Product.post ("/createProduct", CreateProduct);
+Product.post ("/createProduct",upload.single("images"),CreateProduct);
 /**
  * @swagger
  * /api/product/createProduct:
@@ -13,9 +14,55 @@ Product.post ("/createProduct", CreateProduct);
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
+ *         multipart/form-data:
  *           schema:
- *             $ref: '#/components/schemas/ProductInput'
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 description: The name of the product
+ *                 example: "Product Name"
+ *               description:
+ *                 type: string
+ *                 description: The description of the product
+ *                 example: "Product Description"
+ *               images:
+ *                 type: string
+ *                 format: binary
+ *                 description: Image file of the product
+ *               price:
+ *                 type: number
+ *                 description: The price of the product
+ *                 example: 99.99
+ *               salePrice:
+ *                 type: number
+ *                 description: The sale price of the product (optional)
+ *                 example: 79.99
+ *               salePriceDate:
+ *                 type: string
+ *                 format: date
+ *                 description: The end date of the sale price (optional)
+ *                 example: "2024-06-30"
+ *               isTrending:
+ *                 type: boolean
+ *                 description: Indicates whether the product is trending (optional)
+ *                 example: true
+ *               isFavourite:
+ *                 type: boolean
+ *                 description: Indicates whether the product is marked as a favourite (optional)
+ *                 example: true
+ *               rating:
+ *                 type: number
+ *                 description: The rating of the product (optional)
+ *                 example: 4.5
+ *               units:
+ *                 type: integer
+ *                 description: The number of units available for the product
+ *                 example: 100
+ *               categoryId:
+ *                 type: string
+ *                 description: The ID of the category to which the product belongs
+ *                 example: "60a0e5c5e7ad21438c6f4c82"
  *     responses:
  *       201:
  *         description: Product created successfully
@@ -71,8 +118,8 @@ Product.post ("/createProduct", CreateProduct);
  *           type: array
  *           items:
  *             type: string
- *           description: List of image URLs for the product
- *           example: ["https://example.com/image1.jpg", "https://example.com/image2.jpg"]
+ *             format: binary
+ *           description: Image file of the product
  *         price:
  *           type: number
  *           description: The price of the product
@@ -90,6 +137,14 @@ Product.post ("/createProduct", CreateProduct);
  *           type: boolean
  *           description: Indicates whether the product is trending (optional)
  *           example: true
+ *         isFavourite:
+ *           type: boolean
+ *           description: Indicates whether the product is marked as a favourite (optional)
+ *           example: true
+ *         rating:
+ *           type: number
+ *           description: The rating of the product (optional)
+ *           example: 4.5
  *         units:
  *           type: integer
  *           description: The number of units available for the product
@@ -97,7 +152,7 @@ Product.post ("/createProduct", CreateProduct);
  *         categoryId:
  *           type: string
  *           description: The ID of the category to which the product belongs
- *           example: "ObjectID(60a0e5c5e7ad21438c6f4c82)"
+ *           example: "60a0e5c5e7ad21438c6f4c82"
  *
  *     ProductResponse:
  *       type: object
@@ -130,7 +185,8 @@ Product.post ("/createProduct", CreateProduct);
  *           type: array
  *           items:
  *             type: string
- *           description: List of image URLs for the product
+ *             format: binary
+ *           description: Image file of the product
  *           example: ["https://example.com/image1.jpg", "https://example.com/image2.jpg"]
  *         price:
  *           type: number
@@ -149,6 +205,14 @@ Product.post ("/createProduct", CreateProduct);
  *           type: boolean
  *           description: Indicates whether the product is trending (optional)
  *           example: true
+ *         isFavourite:
+ *           type: boolean
+ *           description: Indicates whether the product is marked as a favourite (optional)
+ *           example: true
+ *         rating:
+ *           type: number
+ *           description: The rating of the product (optional)
+ *           example: 4.5
  *         units:
  *           type: integer
  *           description: The number of units available for the product
@@ -156,7 +220,7 @@ Product.post ("/createProduct", CreateProduct);
  *         category:
  *           type: string
  *           description: The ID of the category to which the product belongs
- *           example: "category123"
+ *           example: "60a0e5c5e7ad21438c6f4c82"
  *         createdBy:
  *           type: string
  *           description: The ID of the user who created the product
@@ -177,6 +241,7 @@ Product.post ("/createProduct", CreateProduct);
  *           type: string
  *           example: Error message describing the issue
  */
+
 
 Product.get ("/getAllProducts", getAllProducts);
 /**

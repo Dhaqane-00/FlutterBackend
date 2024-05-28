@@ -23,7 +23,7 @@ app.use(mongoSanitize());
 
 app.use(express.static(path.join(__dirname + "../../public")));
 
-app.use("/uploads", express.static("public/"));
+app.use("/public/uploads", express.static("public/uploads"));
 
 
 

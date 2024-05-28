@@ -4,8 +4,9 @@ const jwt = require('jsonwebtoken');
 exports.CreateProduct = async (req, res) => {
     try {
         // Extract product details from the request body
-        const { name, description, images, price, salePrice, salePriceDate, isTrending, units, categoryId } = req.body;
-
+        const { name, description, price, salePrice, salePriceDate, isTrending,isFavourite,rating, units, categoryId } = req.body;
+        const images= req.file.path
+        let correctedPath =process.env.IMAGE_URL + images.replace(/\\/g, "/");
         // Extract the token from the request headers
         const token = req.headers.authorization && req.headers.authorization.split(' ')[1];
 
@@ -37,7 +38,7 @@ exports.CreateProduct = async (req, res) => {
         const product = new Product({
             name,
             description,
-            images,
+            images:correctedPath,
             price,
             salePrice,
             salePriceDate,

@@ -49,7 +49,18 @@ const userSchema = new Schema({
  *           enum: ["admin", "user"]
  *           default: "user"
  */
-
+userSchema.virtual("photoURL").get(function () {
+  console.log("CALLED ✅🥺❤😅")
+  const urlRegex = /^(ftp|http|https):\/\/[^ "]+$/;
+  if (urlRegex.test(this.photo)) {
+    return this.photo;
+  } else {
+    return (
+      (process.env.IMAGE_URL || 'http://localhost:500/') +
+      (this.photo ? this.photo : "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png")
+    );
+  }
+});
 const userOTP = new Schema({
     userid: { type: Schema.Types.ObjectId, ref: 'User' }, 
     otp: String, 
@@ -97,7 +108,7 @@ const categorySchema = new Schema({
 const productSchema = new Schema({
     name: String,
     description: String,
-    images: [String], // Array of image URLs
+    images:[String], // Array of image URLs
     price: Number,
     salePrice: Number,
     salePriceDate: Date,
@@ -143,6 +154,12 @@ const productSchema = new Schema({
  *         isTrending:
  *           type: boolean
  *           description: Indicates if the product is trending
+ *         isFavourite:
+ *           type: boolean
+ *           description: Indicates if the product is marked as a favourite
+ *         rating:
+ *           type: number
+ *           description: Rating of the product
  *         units:
  *           type: number
  *           description: Number of units available
@@ -157,15 +174,29 @@ const productSchema = new Schema({
  *           format: date-time
  *           description: Date and time when the product was created
  */
+productSchema.virtual("photoURL").get(function () {
+  console.log("CALLED ✅🥺❤😅")
+  const urlRegex = /^(ftp|http|https):\/\/[^ "]+$/;
+  if (urlRegex.test(this.photo)) {
+    return this.photo;
+  } else {
+    return (
+      (process.env.IMAGE_URL || 'http://10.0.2.2:500/') +
+      (this.photo ? this.photo : "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png")
+    );
+  }
+});
 
 // Define Payment schema
-const paymentSchema = new Schema({
-    name: String,
-    description: String,
-    type: String, // e.g., Credit Card, PayPal, etc.
-    createdBy: { type: Schema.Types.ObjectId, ref: 'User' }, // Reference to User model
-    createdAt: { type: Date, default: Date.now }
-});
+const PaymentSchema = new mongoose.Schema(
+  {
+    name: { type: String, default: "EVC",enum:["EVC","CASH"] },
+    des: String,
+  },
+  {
+    timestamps: true,
+  }
+);
 /**
  * @swagger
  * components:
@@ -176,80 +207,50 @@ const paymentSchema = new Schema({
  *         _id:
  *           type: string
  *           description: Unique identifier for the payment
+ *           example: "60a0e5c5e7ad21438c6f4c82"
  *         name:
  *           type: string
  *           description: Name of the payment method
- *         description:
+ *           enum:
+ *             - EVC
+ *             - CASH
+ *           example: "EVC"
+ *         des:
  *           type: string
  *           description: Description of the payment method
- *         type:
- *           type: string
- *           description: Type of payment method (e.g., Credit Card, PayPal)
- *         createdBy:
- *           type: string
- *           description: Reference to the user who created the payment method
+ *           example: "Payment using EVC method"
  *         createdAt:
  *           type: string
  *           format: date-time
  *           description: Date and time when the payment method was created
- */
-
-// Define Order schema
-const orderSchema = new Schema({
-    product: { type: Schema.Types.ObjectId, ref: 'Product' }, // Reference to Product model
-    category: { type: Schema.Types.ObjectId, ref: 'Category' }, // Reference to Category model
-    user: { type: Schema.Types.ObjectId, ref: 'User' }, // Reference to User model
-    paymentMethod: { type: Schema.Types.ObjectId, ref: 'Payment' }, // Reference to Payment model
-    status: String,
-    description: String,
-    quantity: Number,
-    total: Number,
-    createdBy: { type: Schema.Types.ObjectId, ref: 'User' }, // Reference to User model
-    createdAt: { type: Date, default: Date.now }
-});
-/**
- * @swagger
- * components:
- *   schemas:
- *     Order:
- *       type: object
- *       properties:
- *         _id:
- *           type: string
- *           description: Unique identifier for the order
- *         product:
- *           type: string
- *           description: Reference to the product in the order
- *         category:
- *           type: string
- *           description: Reference to the category of the product in the order
- *         user:
- *           type: string
- *           description: Reference to the user who placed the order
- *         paymentMethod:
- *           type: string
- *           description: Reference to the payment method used for the order
- *         status:
- *           type: string
- *           description: Status of the order
- *         description:
- *           type: string
- *           description: Description of the order
- *         quantity:
- *           type: number
- *           description: Quantity of the product ordered
- *         total:
- *           type: number
- *           description: Total price of the order
- *         createdBy:
- *           type: string
- *           description: Reference to the user who created the order
- *         createdAt:
+ *           example: "2024-05-31T12:00:00.000Z"
+ *         updatedAt:
  *           type: string
  *           format: date-time
- *           description: Date and time when the order was created
+ *           description: Date and time when the payment method was last updated
+ *           example: "2024-05-31T12:00:00.000Z"
  */
 
+
+// Define Order schema
+const OrderSchema = new mongoose.Schema(
+    {
+      user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+      payment: { type: mongoose.Schema.Types.ObjectId, ref: "Payment" },
+      products: [
+        {
+          product: { type: mongoose.Schema.Types.ObjectId, ref: "Product" },
+          quantity: { type: Number, default: 1 },
+        },
+      ],
+      total:Number,
+      phone:Number,
+      note: String,
+    },
+    {
+      timestamps: true,
+    }
+  );
 // Define Banner schema
 const bannerSchema = new Schema({
     name: String,
@@ -322,8 +323,8 @@ const User = mongoose.model('User', userSchema);
 const UserOTP = mongoose.model('UserOTP', userOTP);
 const Category = mongoose.model('Category', categorySchema);
 const Product = mongoose.model('Product', productSchema);
-const Payment = mongoose.model('Payment', paymentSchema);
-const Order = mongoose.model('Order', orderSchema);
+const Payment = mongoose.model('Payment', PaymentSchema);
+const Order = mongoose.model('Order', OrderSchema);
 const Banner = mongoose.model('Banner', bannerSchema);
 const ShoppingCart = mongoose.model('ShoppingCart', shoppingCartSchema);
 
