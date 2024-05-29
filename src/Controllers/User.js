@@ -5,7 +5,7 @@ const nodemailer = require("nodemailer");
 const crypto = require('crypto');
 exports.createUser = async (req, res) => {
     const { name, email, password, role } = req.body;
-    const photo=req.file
+    const photo=req.file.path
     let correctedPath =process.env.IMAGE_URL + photo.replace(/\\/g, "/");
 
     try {
