@@ -341,7 +341,17 @@ const shoppingCartSchema = new Schema({
  *           format: date-time
  *           description: Date and time when the shopping cart item was created
  */
+
+const titleSchema = new Schema({
+  title: String,
+  subtitile: String,
+});
+
+
+
 // Create models
+
+
 const User = mongoose.model('User', userSchema);
 const UserOTP = mongoose.model('UserOTP', userOTP);
 const Category = mongoose.model('Category', categorySchema);
@@ -350,8 +360,7 @@ const Payment = mongoose.model('Payment', PaymentSchema);
 const Order = mongoose.model('Order', OrderSchema);
 const Banner = mongoose.model('Banner', bannerSchema);
 const ShoppingCart = mongoose.model('ShoppingCart', shoppingCartSchema);
-
-
+const Title = mongoose.model('Title', titleSchema);
 
 
 
@@ -363,5 +372,6 @@ module.exports = {
     Payment,
     Order,
     Banner,
-    ShoppingCart
+    ShoppingCart,
+    Title
 };

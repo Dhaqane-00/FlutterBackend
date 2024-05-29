@@ -4,6 +4,7 @@ const Product = require("./Routers/Product")
 const Payment = require("./Routers/Payment")
 const Order = require("./Routers/Order")
 const Banner = require("./Routers/Banner")
+const Title = require("./Routers/Title")
 const ShoppingCart = require("./Routers/ShoppingCart")
 const express = require("express");
 const mongoSanitize = require("express-mongo-sanitize");
@@ -34,6 +35,7 @@ app.use("/api/payment",Payment);
 app.use("/api/order",Order);
 app.use("/api/banner",Banner);
 app.use("/api/shoping",ShoppingCart);
+app.use("/api/Title",Title);
 //test file upload
 
 
