@@ -265,20 +265,19 @@ exports.resetPassword = async (req, res) => {
 // Function to send OTP via email
 const sendOTPByEmail = async (email, otp) => {
     try {
+
         // Create a transporter using SMTP
-        
         const transporter = nodemailer.createTransport({
-            host: "sandbox.smtp.mailtrap.io",
-            port: 2525,
+            service: 'gmail',
             auth: {
-              user: "787c4bc453070b",
-              pass: "0ec27979cfe733"
+              user: 'abdilaahimowliid@gmail.com',
+              pass: 'trjm cgzx yqwk ajhp' // Updated app password
             }
           });
 
         // Send mail with defined transport object
         await transporter.sendMail({
-            from: 'abdilaahimowliid@example.com', // Sender email address
+            from: 'abdilaahimowliid@gmail.com', // Sender email address
             to: email, // Recipient email address
             subject: 'Your OTP', // Email subject
             text: `Your OTP is: ${otp}` // Email body with OTP
