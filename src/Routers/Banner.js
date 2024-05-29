@@ -28,7 +28,11 @@ Banner.post("/CreateBanner",upload.single("images"), createBanner);
  *                 type: string
  *                 description: Description of the banner
  *                 example: "Big discounts on summer items"
- *               image:
+ *               brand:
+ *                 type: number
+ *                 description: Brand ID associated with the banner
+ *                 example: 123
+ *               images:
  *                 type: string
  *                 format: binary
  *                 description: Banner image file
@@ -71,7 +75,11 @@ Banner.post("/CreateBanner",upload.single("images"), createBanner);
  *           type: string
  *           description: Description of the banner
  *           example: "Big discounts on summer items"
- *         image:
+ *         brand:
+ *           type: number
+ *           description: Brand ID associated with the banner
+ *           example: 123
+ *         images:
  *           type: string
  *           format: binary
  *           description: Banner image file
@@ -101,7 +109,11 @@ Banner.post("/CreateBanner",upload.single("images"), createBanner);
  *           type: string
  *           description: Description of the banner
  *           example: "Big discounts on summer items"
- *         image:
+ *         brand:
+ *           type: number
+ *           description: Brand ID associated with the banner
+ *           example: 123
+ *         images:
  *           type: string
  *           format: uri
  *           description: URL of the banner image
