@@ -5,8 +5,6 @@ const nodemailer = require("nodemailer");
 const crypto = require('crypto');
 exports.createUser = async (req, res) => {
     const { name, email, password, role } = req.body;
-    const photo=req.file.path
-    let correctedPath =process.env.IMAGE_URL + photo.replace(/\\/g, "/");
 
     try {
         // Check if user exists
@@ -27,7 +25,6 @@ exports.createUser = async (req, res) => {
             name,
             email,
             password: hashedPassword,
-            photo:correctedPath,
             role,
             verify: false,
             otp: OTP,
@@ -118,7 +115,7 @@ exports.getAllUsers = async (req, res) => {
 };
 
 exports.updateUser = async (req, res) => {
-    const { name, email, password, photo } = req.body; // Destructure name, email, password, and photo directly from req.body
+    const { name, email, password } = req.body; // Destructure name, email, password, and photo directly from req.body
     const userId = req.params.id; // Assuming the user ID is passed as a parameter in the request URL
     try {
         // Check if the user exists
@@ -138,7 +135,7 @@ exports.updateUser = async (req, res) => {
         existingUser.name = name;
         existingUser.email = email;
         existingUser.password = hashedPassword;
-        existingUser.photo = photo;
+        
 
         // Save the updated user
         const updatedUser = await existingUser.save();

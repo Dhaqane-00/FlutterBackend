@@ -6,10 +6,6 @@ const userSchema = new Schema({
     name: String,
     email: { type: String, unique: true },
     password: String,
-    photo: {
-        type: String,
-        default: "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
-    },
     role: {
         type: String,
         enum: ["admin", "user"],
@@ -49,18 +45,6 @@ const userSchema = new Schema({
  *           enum: ["admin", "user"]
  *           default: "user"
  */
-userSchema.virtual("photoURL").get(function () {
-  console.log("CALLED ✅🥺❤😅")
-  const urlRegex = /^(ftp|http|https):\/\/[^ "]+$/;
-  if (urlRegex.test(this.photo)) {
-    return this.photo;
-  } else {
-    return (
-      (process.env.IMAGE_URL || 'https://flutterbackend-production-d4d0.up.railway.app/') +
-      (this.photo ? this.photo : "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png")
-    );
-  }
-});
 const userOTP = new Schema({
     userid: { type: Schema.Types.ObjectId, ref: 'User' }, 
     otp: String, 
