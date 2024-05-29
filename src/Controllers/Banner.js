@@ -4,8 +4,10 @@ const jwt = require('jsonwebtoken');
 exports.createBanner = async (req, res) => {
     try {
         // Extract banner details from the request body
-        const { name, description, image } = req.body;
+        const { name, description, brand } = req.body;
 
+        const images= req.file.path
+        let correctedPath =process.env.IMAGE_URL + images.replace(/\\/g, "/");
         // Extract the token from the request headers
         const token = req.headers.authorization && req.headers.authorization.split(' ')[1];
 
@@ -26,7 +28,8 @@ exports.createBanner = async (req, res) => {
         const banner = new Banner({
             name,
             description,
-            image,
+            images:correctedPath,
+            brand,
             createdBy: decodedToken.userId,
             createdAt: new Date()
         });

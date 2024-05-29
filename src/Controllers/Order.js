@@ -6,17 +6,14 @@ module.exports = {
       try {
         const {
           user,
-          payment: paymentID,
+          payment,
           products,
           total,
           note,
           phone,
         } = req.body;
-  
-        console.log(paymentID);
         console.log(phone);
-        const paymentMethod = await Payment.findById(paymentID);
-        if (paymentMethod.name === "CASH") {
+        if (payment === "CASH") {
           const order = await Order({
             user: user,
             payment: paymentID,
@@ -38,7 +35,7 @@ module.exports = {
           if (waafiResponse.status) {
             const order = await Order({
               user: user,
-              payment: paymentID,
+              payment,
               products: products,
               total: total,
               note: note,

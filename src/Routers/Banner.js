@@ -1,8 +1,9 @@
 const express = require('express');
+const upload = require("../utils/upload");
 const Banner = express.Router();
 const {createBanner,getAllBanners,updateBanner,deleteBanner} = require('../Controllers/Banner')
 
-Banner.post("/CreateBanner", createBanner);
+Banner.post("/CreateBanner",upload.single("images"), createBanner);
 /**
  * @swagger
  * /api/banner/createBanner:
@@ -15,9 +16,22 @@ Banner.post("/CreateBanner", createBanner);
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
+ *         multipart/form-data:
  *           schema:
- *             $ref: '#/components/schemas/BannerInput'
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 description: Name of the banner
+ *                 example: "Summer Sale"
+ *               description:
+ *                 type: string
+ *                 description: Description of the banner
+ *                 example: "Big discounts on summer items"
+ *               image:
+ *                 type: string
+ *                 format: binary
+ *                 description: Banner image file
  *     responses:
  *       201:
  *         description: Banner created successfully
@@ -59,9 +73,8 @@ Banner.post("/CreateBanner", createBanner);
  *           example: "Big discounts on summer items"
  *         image:
  *           type: string
- *           format: uri
- *           description: URL of the banner image
- *           example: "https://example.com/banner.jpg"
+ *           format: binary
+ *           description: Banner image file
  *     BannerResponse:
  *       type: object
  *       properties:

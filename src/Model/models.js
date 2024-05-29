@@ -8,7 +8,6 @@ const userSchema = new Schema({
     password: String,
     photo: {
         type: String,
-        default: "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
     },
     role: {
         type: String,
@@ -56,7 +55,7 @@ userSchema.virtual("photoURL").get(function () {
     return this.photo;
   } else {
     return (
-      (process.env.IMAGE_URL || 'http://localhost:500/') +
+      (process.env.IMAGE_URL || 'https://flutterbackend-production-d4d0.up.railway.app/') +
       (this.photo ? this.photo : "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png")
     );
   }
@@ -74,6 +73,18 @@ const categorySchema = new Schema({
     photo: String,
     createdBy: { type: Schema.Types.ObjectId, ref: 'User' }, // Reference to User model
     createdAt: { type: Date, default: Date.now }
+});
+categorySchema.virtual("photoURL").get(function () {
+  console.log("CALLED ✅🥺❤😅")
+  const urlRegex = /^(ftp|http|https):\/\/[^ "]+$/;
+  if (urlRegex.test(this.photo)) {
+    return this.photo;
+  } else {
+    return (
+      (process.env.IMAGE_URL || 'https://flutterbackend-production-d4d0.up.railway.app/') +
+      (this.photo ? this.photo : "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png")
+    );
+  }
 });
 /**
  * @swagger
@@ -181,7 +192,7 @@ productSchema.virtual("photoURL").get(function () {
     return this.photo;
   } else {
     return (
-      (process.env.IMAGE_URL || 'http://10.0.2.2:500/') +
+      (process.env.IMAGE_URL || 'https://flutterbackend-production-d4d0.up.railway.app/') +
       (this.photo ? this.photo : "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png")
     );
   }
@@ -255,7 +266,8 @@ const OrderSchema = new mongoose.Schema(
 const bannerSchema = new Schema({
     name: String,
     description: String,
-    image: String,
+    images: String,
+    brand: Number,
     createdBy: { type: Schema.Types.ObjectId, ref: 'User' }, // Reference to User model
     createdAt: { type: Date, default: Date.now }
 });
@@ -286,7 +298,18 @@ const bannerSchema = new Schema({
  *           format: date-time
  *           description: Date and time when the banner was created
  */
-
+bannerSchema.virtual("photoURL").get(function () {
+  console.log("CALLED ✅🥺❤😅")
+  const urlRegex = /^(ftp|http|https):\/\/[^ "]+$/;
+  if (urlRegex.test(this.photo)) {
+    return this.photo;
+  } else {
+    return (
+      (process.env.IMAGE_URL || 'https://flutterbackend-production-d4d0.up.railway.app/') +
+      (this.photo ? this.photo : "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png")
+    );
+  }
+});
 // Define ShoppingCart schema
 const shoppingCartSchema = new Schema({
     user: { type: Schema.Types.ObjectId, ref: 'User' }, // Reference to User model

@@ -1,9 +1,10 @@
 const express = require('express');
+const upload = require("../utils/upload");
 const category = express.Router();
 const {CreateCategory,GetAllCategories,UpdateCategory,DeleteCategory} = require('../Controllers/Category')
 
 
-category.post("/createCategory", CreateCategory);
+category.post("/createCategory",upload.single("photo"), CreateCategory);
 /**
  * @swagger
  * /api/category/createCategory:
@@ -14,9 +15,22 @@ category.post("/createCategory", CreateCategory);
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
+ *         multipart/form-data:
  *           schema:
- *             $ref: '#/components/schemas/CategoryInput'
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 description: The name of the category
+ *                 example: "Electronics"
+ *               description:
+ *                 type: string
+ *                 description: The description of the category
+ *                 example: "A category for electronic devices"
+ *               photo:
+ *                 type: string
+ *                 format: binary
+ *                 description: The photo file of the category (optional)
  *     responses:
  *       201:
  *         description: Category created successfully
@@ -94,7 +108,12 @@ category.post("/createCategory", CreateCategory);
  *         createdBy:
  *           type: string
  *           description: The ID of the user who created the category
+ *         createdAt:
+ *           type: string
+ *           format: date-time
+ *           description: The date and time when the category was created
  */
+
 
 category.get("/getAllCategories", GetAllCategories);
 /**

@@ -4,7 +4,9 @@ const jwt = require('jsonwebtoken');
 exports.CreateCategory = async (req, res) => {
     try {
         // Extract category details from the request body
-        const { name, description, photo } = req.body;
+        const { name, description, } = req.body;
+        const photo= req.file.path
+        let correctedPath =process.env.IMAGE_URL + photo.replace(/\\/g, "/");
 
         // Extract the token from the request headers
         const token = req.headers.authorization && req.headers.authorization.split(' ')[1];
@@ -36,7 +38,7 @@ exports.CreateCategory = async (req, res) => {
         const category = new Category({
             name,
             description,
-            photo,
+            photo:correctedPath,
             createdBy: decodedToken.userId
         });
 
