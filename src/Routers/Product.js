@@ -27,9 +27,11 @@ Product.post ("/createProduct",upload.single("images"),CreateProduct);
  *                 description: The description of the product
  *                 example: "Product Description"
  *               images:
- *                 type: string
- *                 format: binary
- *                 description: Image file of the product
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *                   format: binary
+ *                 description: Image files of the product
  *               price:
  *                 type: number
  *                 description: The price of the product
@@ -119,7 +121,7 @@ Product.post ("/createProduct",upload.single("images"),CreateProduct);
  *           items:
  *             type: string
  *             format: binary
- *           description: Image file of the product
+ *           description: Image files of the product
  *         price:
  *           type: number
  *           description: The price of the product
@@ -186,7 +188,7 @@ Product.post ("/createProduct",upload.single("images"),CreateProduct);
  *           items:
  *             type: string
  *             format: binary
- *           description: Image file of the product
+ *           description: Image files of the product
  *           example: ["https://example.com/image1.jpg", "https://example.com/image2.jpg"]
  *         price:
  *           type: number
