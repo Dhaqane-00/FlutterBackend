@@ -52,7 +52,7 @@ const options = {
         },
         servers: [
             {
-                url: "http://localhost:500",
+                url: "https://flutterbackend-production-d4d0.up.railway.app",
                 description: "Development server",
             },
         ],
