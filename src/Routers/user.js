@@ -2,7 +2,7 @@ const express = require("express");
 const upload = require("../utils/upload");
 const user = express.Router();
 
-const {createUser,OTPVerification,verifyOTP,GetUser,getAllUsers,ForgetPassword,resetPassword,updateUser,deleteUser} = require('../Controllers/User')
+const {createUser,OTPVerification,verifyOTP,ForgetVerifyOtp,GetUser,getAllUsers,ForgetPassword,resetPassword,updateUser,deleteUser} = require('../Controllers/User')
 
 
 user.post("/createUser",upload.single("photo"), createUser);
@@ -175,7 +175,12 @@ user.get("/getAllUsers", getAllUsers);
  */
 user.post("/forgotPassword",ForgetPassword);
 
+user.post("/ForgetVerifyOtp",ForgetVerifyOtp);
+
 user.post("/resetPassword",resetPassword);
+
+user.post("/OTPVerification",OTPVerification);
+
 
 user.patch("/UpdateUser/:id",updateUser);
 /**

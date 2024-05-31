@@ -230,8 +230,8 @@ exports.ForgetPassword = async (req, res) => {
     }
 };
 
-exports.resetPassword = async (req, res) => {
-    const { email, otp, newPassword } = req.body;
+exports.ForgetVerifyOtp = async (req, res) => {
+    const { email, otp } = req.body;
 
     try {
         // Find user by email and OTP
@@ -239,6 +239,26 @@ exports.resetPassword = async (req, res) => {
 
         if (!user) {
             return res.status(400).json({ message: "Invalid or expired OTP" });
+        }
+
+        // OTP is valid, proceed to allow password reset
+        return res.status(200).json({ message: "OTP verified successfully" });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: "Server error" });
+    }
+};
+
+
+exports.resetPassword = async (req, res) => {
+    const { email, newPassword } = req.body;
+
+    try {
+        // Find user by email
+        const user = await User.findOne({ email });
+
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
         }
 
         // Hash the new password
@@ -256,6 +276,7 @@ exports.resetPassword = async (req, res) => {
         return res.status(500).json({ message: "Server error" });
     }
 };
+
 
 
 // Function to send OTP via email
