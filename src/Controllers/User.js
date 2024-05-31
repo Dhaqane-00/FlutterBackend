@@ -242,7 +242,7 @@ exports.ForgetVerifyOtp = async (req, res) => {
         }
 
         // OTP is valid, proceed to allow password reset
-        return res.status(200).json({ message: "OTP verified successfully" });
+        return res.status(200).json({ message: "OTP verified successfully" , user });
     } catch (error) {
         console.error(error);
         return res.status(500).json({ message: "Server error" });
