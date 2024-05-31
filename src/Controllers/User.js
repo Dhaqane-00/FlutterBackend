@@ -59,6 +59,9 @@ exports.GetUser = async (req, res) => {
         if (!existingUser) {
             return res.status(404).json({ message: "Email not found" });
         }
+        if (!existingUser.verify) {
+            return res.status(403).json({ message: "User not verified" });
+        }
 
         const isPasswordCorrect = await bcrypt.compare(password, existingUser.password);
 
@@ -177,8 +180,7 @@ exports.deleteUser = async (req, res) => {
         return res.status(500).json({ message: "Server error" });
     }
 };
-
-exports.forgotPassword = async (req, res) => {
+exports.ForgetPassword = async (req, res) => {
     const { email } = req.body;
 
     try {
@@ -189,38 +191,37 @@ exports.forgotPassword = async (req, res) => {
             return res.status(404).json({ message: "User not found" });
         }
 
-        // Generate a unique token for resetting password
-        const resetToken = crypto.randomBytes(20).toString('hex');
-        user.resetPasswordToken = resetToken;
-        user.resetPasswordExpires = Date.now() + 3600000; // Token expires in 1 hour
+        // Generate a 4-digit OTP
+        const otp = Math.floor(1000 + Math.random() * 9000).toString();
+        user.otp = otp;
+        user.otpExpires = Date.now() + 3600000; // OTP expires in 1 hour
         await user.save();
 
-        // Send reset password email with resetToken
+        // Send reset password email with OTP
         const transporter = nodemailer.createTransport({
             host: "sandbox.smtp.mailtrap.io",
             port: 2525,
             auth: {
-              user: "787c4bc453070b",
-              pass: "0ec27979cfe733"
+                user: "787c4bc453070b",
+                pass: "0ec27979cfe733"
             }
-          });
+        });
 
         const mailOptions = {
             from: 'your_email@gmail.com',
             to: user.email,
             subject: 'Password Reset Request',
             text: `You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n` +
-                `Please click on the following link, or paste this into your browser to complete the process:\n\n` +
-                `http://${req.headers.host}/reset/${resetToken}\n\n` +
+                `Your OTP (One-Time Password) for resetting your password is: ${otp}\n\n` +
                 `If you did not request this, please ignore this email and your password will remain unchanged.\n`
         };
 
         transporter.sendMail(mailOptions, function (err) {
             if (err) {
                 console.error(err);
-                return res.status(500).json({ message: "Failed to send reset password email" });
+                return res.status(500).json({ message: "Failed to send OTP email" });
             }
-            return res.status(200).json({ message: "Reset password email sent" });
+            return res.status(200).json({ message: "OTP email sent" });
         });
 
     } catch (error) {
@@ -230,25 +231,23 @@ exports.forgotPassword = async (req, res) => {
 };
 
 exports.resetPassword = async (req, res) => {
-    const { token, newPassword } = req.body;
+    const { email, otp, newPassword } = req.body;
 
     try {
-        // Verify and decode the reset token
-        const decoded = jwt.verify(token, process.env.JWT_RESET_SECRET);
-
-        // Find user by decoded userId and reset token
-        const user = await User.findOne({ _id: decoded.userId, resetToken: token });
+        // Find user by email and OTP
+        const user = await User.findOne({ email, otp, otpExpires: { $gt: Date.now() } });
 
         if (!user) {
-            return res.status(400).json({ message: "Invalid or expired token" });
+            return res.status(400).json({ message: "Invalid or expired OTP" });
         }
 
         // Hash the new password
         const hashedPassword = await bcrypt.hash(newPassword, 10);
 
-        // Update user's password and clear reset token
+        // Update user's password and clear OTP
         user.password = hashedPassword;
-        user.resetToken = null;
+        user.otp = null;
+        user.otpExpires = null;
         await user.save();
 
         return res.status(200).json({ message: "Password reset successfully" });
