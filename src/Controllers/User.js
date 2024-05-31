@@ -199,16 +199,15 @@ exports.ForgetPassword = async (req, res) => {
 
         // Send reset password email with OTP
         const transporter = nodemailer.createTransport({
-            host: "sandbox.smtp.mailtrap.io",
-            port: 2525,
+            service: 'gmail',
             auth: {
-                user: "787c4bc453070b",
-                pass: "0ec27979cfe733"
+              user: 'abdilaahimowliid@gmail.com',
+              pass: 'trjm cgzx yqwk ajhp' // Updated app password
             }
-        });
+          });
 
         const mailOptions = {
-            from: 'your_email@gmail.com',
+            from: 'abdilaahimowliid@gmail.com',
             to: user.email,
             subject: 'Password Reset Request',
             text: `You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n` +
