@@ -11,7 +11,7 @@ const userSchema = new Schema({
         enum: ["admin", "user"],
         default: "user"
     },
-    photo: String,
+    photo: { type: String, default: "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png" },
     verify: { type: Boolean, default: false },
     otp: String,
     otpExpires: Date
@@ -23,7 +23,7 @@ userSchema.virtual("photoURL").get(function () {
     return this.photo;
   } else {
     return (
-      (process.env.IMAGE_URL || 'http://localhost:5000/') +
+      (process.env.IMAGE_URL || 'https://flutterbackend-production-d4d0.up.railway.app/') +
       (this.photo ? this.photo : "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png")
     );
   }
