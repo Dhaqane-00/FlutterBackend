@@ -11,9 +11,22 @@ const userSchema = new Schema({
         enum: ["admin", "user"],
         default: "user"
     },
+    photo: String,
     verify: { type: Boolean, default: false },
     otp: String,
     otpExpires: Date
+});
+userSchema.virtual("photoURL").get(function () {
+  console.log("CALLED ✅🥺❤😅")
+  const urlRegex = /^(ftp|http|https):\/\/[^ "]+$/;
+  if (urlRegex.test(this.photo)) {
+    return this.photo;
+  } else {
+    return (
+      (process.env.IMAGE_URL || 'http://localhost:5000/') +
+      (this.photo ? this.photo : "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png")
+    );
+  }
 });
 /**
  * @swagger

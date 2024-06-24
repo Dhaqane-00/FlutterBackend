@@ -5,10 +5,15 @@ const nodemailer = require("nodemailer");
 const crypto = require('crypto');
 exports.createUser = async (req, res) => {
     const { name, email, password, role } = req.body;
+    const photo = req.file.path;
+    const correctedPath = process.env.IMAGE_URL + photo.replace(/\\/g, "/");
 
     try {
+        // Convert email to lowercase
+        const lowerCaseEmail = email.toLowerCase();
+
         // Check if user exists
-        const existingUser = await User.findOne({ email });
+        const existingUser = await User.findOne({ email: lowerCaseEmail });
 
         if (existingUser) {
             return res.status(400).json({ message: "User already exists" });
@@ -23,19 +28,20 @@ exports.createUser = async (req, res) => {
         // Create user with hashed password and OTP details
         const user = await User.create({
             name,
-            email,
+            email: lowerCaseEmail,
             password: hashedPassword,
             role,
+            photo: correctedPath,
             verify: false,
             otp: OTP,
             otpExpires: Date.now() + 10 * 60 * 1000 // 10 minutes from now
         });
 
         // Send OTP to the user's email
-        await sendOTPByEmail(email, OTP);
+        await sendOTPByEmail(lowerCaseEmail, OTP);
 
         // Generate JWT token
-        const token = jwt.sign({ userId: user._id, name, email, role }, process.env.JWT_SECRET, { expiresIn: '1D' });
+        const token = jwt.sign({ userId: user._id, name, email: lowerCaseEmail, role }, process.env.JWT_SECRET, { expiresIn: '1D' });
 
         return res.status(201).json({
             message: "User created successfully, OTP sent to email",
@@ -51,10 +57,14 @@ exports.createUser = async (req, res) => {
     }
 };
 
+
 exports.GetUser = async (req, res) => {
     const { email, password } = req.body;
     try {
-        const existingUser = await User.findOne({ email });
+        // Convert email to lowercase
+        const lowerCaseEmail = email.toLowerCase();
+
+        const existingUser = await User.findOne({ email: lowerCaseEmail });
 
         if (!existingUser) {
             return res.status(404).json({ message: "Email not found" });
@@ -74,13 +84,13 @@ exports.GetUser = async (req, res) => {
 
         // Generate JWT token
         const token = jwt.sign(
-            { userId: existingUser._id, email: email, role: role }, // Include role here
+            { userId: existingUser._id, email: lowerCaseEmail, role: role }, // Include role here
             process.env.JWT_SECRET,
             { expiresIn: '1D' }
         );
 
         return res.status(200).json({
-            message: "user Login successfully",
+            message: "User logged in successfully",
             data: {
                 ...existingUser._doc,
                 token
@@ -92,6 +102,7 @@ exports.GetUser = async (req, res) => {
         return res.status(500).json({ message: "Server error" });
     }
 };
+
 
 
 
