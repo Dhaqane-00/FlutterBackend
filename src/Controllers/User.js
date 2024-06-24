@@ -6,7 +6,6 @@ const crypto = require('crypto');
 exports.createUser = async (req, res) => {
     const { name, email, password, role } = req.body;
     const photo = req.file;
-    const correctedPath = process.env.IMAGE_URL + photo.replace(/\\/g, "/");
 
     try {
         // Convert email to lowercase
@@ -31,7 +30,7 @@ exports.createUser = async (req, res) => {
             email: lowerCaseEmail,
             password: hashedPassword,
             role,
-            photo: correctedPath,
+            photo: photo ? process.env.IMAGE_URL + photo.replace(/\\/g, "/") : "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
             verify: false,
             otp: OTP,
             otpExpires: Date.now() + 10 * 60 * 1000 // 10 minutes from now
