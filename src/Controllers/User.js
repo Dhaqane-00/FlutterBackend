@@ -3,9 +3,16 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
 const crypto = require('crypto');
+const path = require('path');
+const { env } = require("process");
 exports.createUser = async (req, res) => {
-    const { name, email, password, role } = req.body;
-    const photo = req.file;
+    const { name, email, password, role, address } = req.body;
+    let photoPath =process.env.Default_Photo_URL;
+
+    if (req.file) {
+        const photo = req.file.path;
+        photoPath = process.env.IMAGE_URL + photo.replace(/\\/g, "/");
+    }
 
     try {
         // Convert email to lowercase
@@ -30,7 +37,8 @@ exports.createUser = async (req, res) => {
             email: lowerCaseEmail,
             password: hashedPassword,
             role,
-            photo: photo ? process.env.IMAGE_URL + photo.replace(/\\/g, "/") : "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
+            address,
+            photo: photoPath,
             verify: false,
             otp: OTP,
             otpExpires: Date.now() + 10 * 60 * 1000 // 10 minutes from now
@@ -128,8 +136,11 @@ exports.getAllUsers = async (req, res) => {
 };
 
 exports.updateUser = async (req, res) => {
-    const { name, email, password } = req.body; // Destructure name, email, password, and photo directly from req.body
-    const userId = req.params.id; // Assuming the user ID is passed as a parameter in the request URL
+    const { name, email, password, role, address, verify, otp, otpExpires } = req.body;
+    const userId = req.params.id;
+    const photo= req.file.path
+    let correctedPath =process.env.IMAGE_URL + photo.replace(/\\/g, "/");
+    
     try {
         // Check if the user exists
         const existingUser = await User.findById(userId);
@@ -145,10 +156,15 @@ exports.updateUser = async (req, res) => {
         }
 
         // Update user fields
-        existingUser.name = name;
-        existingUser.email = email;
+        existingUser.name = name || existingUser.name;
+        existingUser.email = email || existingUser.email;
         existingUser.password = hashedPassword;
-        
+        existingUser.photo = correctedPath || existingUser.photo;
+        existingUser.role = role || existingUser.role;
+        existingUser.address = address || existingUser.address;
+        existingUser.verify = verify !== undefined ? verify : existingUser.verify;
+        existingUser.otp = otp || existingUser.otp;
+        existingUser.otpExpires = otpExpires || existingUser.otpExpires;
 
         // Save the updated user
         const updatedUser = await existingUser.save();
@@ -157,13 +173,32 @@ exports.updateUser = async (req, res) => {
             message: "User updated successfully",
             data: updatedUser
         });
-        
 
     } catch (error) {
         console.error(error);
         return res.status(500).json({ message: "Server error" });
     }
 };
+exports.getUserById = async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const user = await User.findById(id);
+
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        return res.status(200).json({
+            message: "User retrieved successfully",
+            data: user
+        });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: "Server error" });
+    }
+};
+
 
 
 exports.deleteUser = async (req, res) => {

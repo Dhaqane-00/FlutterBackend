@@ -2,7 +2,7 @@ const express = require("express");
 const upload = require("../utils/upload");
 const user = express.Router();
 
-const {createUser,OTPVerification,verifyOTP,ForgetVerifyOtp,GetUser,getAllUsers,ForgetPassword,resetPassword,updateUser,deleteUser} = require('../Controllers/User')
+const {createUser,OTPVerification,verifyOTP,ForgetVerifyOtp,GetUser,getAllUsers, getUserById,ForgetPassword,resetPassword,updateUser,deleteUser} = require('../Controllers/User')
 
 
 user.post("/createUser",upload.single("photo"), createUser);
@@ -180,9 +180,10 @@ user.post("/ForgetVerifyOtp",ForgetVerifyOtp);
 user.post("/resetPassword",resetPassword);
 
 user.post("/OTPVerification",OTPVerification);
+user.get("/getUserById/:id", getUserById);
 
 
-user.patch("/UpdateUser/:id",updateUser);
+user.put("/UpdateUser/:id",upload.single("photo"),updateUser);
 /**
  * @swagger
  * /api/user/UpdateUser/{id}:
