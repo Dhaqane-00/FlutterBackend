@@ -3,7 +3,6 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
 const crypto = require('crypto');
-const fs = require('fs');
 const path = require('path');
 const { env } = require("process");
 exports.createUser = async (req, res) => {
@@ -328,31 +327,25 @@ exports.resetPassword = async (req, res) => {
 
 
 
-
-
+// Function to send OTP via email
 const sendOTPByEmail = async (email, otp) => {
     try {
-        // Read HTML template from file
-        const htmlTemplate = fs.readFileSync('email-template.html', 'utf8');
-
-        // Replace placeholder with OTP in the HTML template
-        const htmlContent = htmlTemplate.replace('{OTP_PLACEHOLDER}', otp);
 
         // Create a transporter using SMTP
         const transporter = nodemailer.createTransport({
             service: 'gmail',
             auth: {
-                user: 'abdilaahimowliid@gmail.com',
-                pass: 'trjm cgzx yqwk ajhp' // Updated app password
+              user: 'abdilaahimowliid@gmail.com',
+              pass: 'trjm cgzx yqwk ajhp' // Updated app password
             }
-        });
+          });
 
         // Send mail with defined transport object
         await transporter.sendMail({
             from: 'abdilaahimowliid@gmail.com', // Sender email address
             to: email, // Recipient email address
             subject: 'Your OTP', // Email subject
-            html: htmlContent // Email body with HTML content
+            text: `Your OTP is: ${otp}` // Email body with OTP
         });
 
         console.log('OTP sent successfully to', email);
@@ -361,12 +354,11 @@ const sendOTPByEmail = async (email, otp) => {
         throw new Error('Failed to send OTP');
     }
 };
-
+// Function to generate a random OTP
 // Function to generate a random 4-digit OTP
 const generateOTP = () => {
     return Math.floor(1000 + Math.random() * 9000); // Generate a 4-digit OTP
 };
-
 
 
 // Example route for initiating OTP verification
