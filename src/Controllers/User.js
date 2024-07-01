@@ -138,9 +138,13 @@ exports.getAllUsers = async (req, res) => {
 exports.updateUser = async (req, res) => {
     const { name, email, password, role, address, verify, otp, otpExpires } = req.body;
     const userId = req.params.id;
-    const photo= req.file.path
-    let correctedPath =process.env.IMAGE_URL + photo.replace(/\\/g, "/");
-    
+
+    let photoPath =process.env.Default_Photo_URL;
+
+    if (req.file) {
+        const photo = req.file.path;
+        photoPath = process.env.IMAGE_URL + photo.replace(/\\/g, "/");
+    }
     try {
         // Check if the user exists
         const existingUser = await User.findById(userId);
@@ -159,7 +163,7 @@ exports.updateUser = async (req, res) => {
         existingUser.name = name || existingUser.name;
         existingUser.email = email || existingUser.email;
         existingUser.password = hashedPassword;
-        existingUser.photo = correctedPath || existingUser.photo;
+        existingUser.photo = photoPath || existingUser.photo;
         existingUser.role = role || existingUser.role;
         existingUser.address = address || existingUser.address;
         existingUser.verify = verify !== undefined ? verify : existingUser.verify;
