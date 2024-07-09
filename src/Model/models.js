@@ -247,6 +247,7 @@ const PaymentSchema = new mongoose.Schema(
 const OrderSchema = new mongoose.Schema(
     {
       user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+      payment: { type: String, default: "EVC",enum:["EVC","CASH"] },
       
       products: [
         {
