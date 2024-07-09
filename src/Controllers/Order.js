@@ -64,9 +64,8 @@ module.exports = {
           .populate('products.quantity')
           .populate({
             path: 'products',
-
             populate: {
-                path: 'product', // If products have further nested references
+                path: 'Product', // If products have further nested references
                 model: 'Product'        // Model name for products
             }
         });
