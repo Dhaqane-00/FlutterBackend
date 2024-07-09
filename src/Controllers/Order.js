@@ -17,7 +17,7 @@ module.exports = {
           const order = await Order({
             user: user,
             payment: payment,
-            products: Product,
+            products: products,
             total: total,
             note: note,
             phone: phone,
