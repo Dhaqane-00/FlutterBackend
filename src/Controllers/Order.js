@@ -62,13 +62,7 @@ module.exports = {
         
           .populate('user')
           .populate('products.quantity')
-          .populate({
-            path: 'products',
-            populate: {
-                path: 'Product', // If products have further nested references
-                model: 'Product'        // Model name for products
-            }
-        });
+          .populate('products.product');
         res.status(200).json(orders);
       } catch (e) {
         res.status(400).json({ error: e.message });
