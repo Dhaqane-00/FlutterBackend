@@ -16,8 +16,8 @@ module.exports = {
         if (payment === "CASH") {
           const order = await Order({
             user: user,
-            payment: paymentID,
-            products: products,
+            payment: Payment,
+            products: Product,
             total: total,
             note: note,
             phone: phone,
@@ -45,20 +45,10 @@ module.exports = {
             res.status(201).json(order);
           } else {
             // Handling payment failure
-            // return res.status(400).send({
-            //   status: "failed",
-            //   message: `${waafiResponse.error}` ?? "Payment Failed Try Again",
-            // });
-            const order = await Order({
-              user: user,
-              payment: paymentID,
-              products: products,
-              total: total,
-              note: note,
-              phone: phone,
-            }).save();
-  
-            res.status(201).json(order);
+            return res.status(400).send({
+              status: "failed",
+              message: `${waafiResponse.error}` ?? "Payment Failed Try Again",
+            });
           }
         }
       } catch (e) {
@@ -70,9 +60,11 @@ module.exports = {
       try {
         const orders = await Order.find()
         
-          .populate("payment")
+          .populate('user')
+          .populate('products.quantity')
           .populate({
             path: 'products',
+
             populate: {
                 path: 'product', // If products have further nested references
                 model: 'Product'        // Model name for products

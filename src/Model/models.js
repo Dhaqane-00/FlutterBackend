@@ -15,7 +15,8 @@ const userSchema = new Schema({
     photo: { type: String, default: "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png" },
     verify: { type: Boolean, default: false },
     otp: String,
-    otpExpires: Date
+    otpExpires: Date,
+    googleId: String
 });
 userSchema.virtual("photoURL").get(function () {
   console.log("CALLED ✅🥺❤😅")
@@ -246,7 +247,7 @@ const PaymentSchema = new mongoose.Schema(
 const OrderSchema = new mongoose.Schema(
     {
       user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
-      payment: { type: mongoose.Schema.Types.ObjectId, ref: "Payment" },
+      
       products: [
         {
           product: { type: mongoose.Schema.Types.ObjectId, ref: "Product" },
