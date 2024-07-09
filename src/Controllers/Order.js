@@ -16,7 +16,7 @@ module.exports = {
         if (payment === "CASH") {
           const order = await Order({
             user: user,
-            payment: Payment,
+            payment: payment,
             products: Product,
             total: total,
             note: note,
@@ -35,7 +35,7 @@ module.exports = {
           if (waafiResponse.status) {
             const order = await Order({
               user: user,
-              payment,
+              payment: payment,
               products: products,
               total: total,
               note: note,
