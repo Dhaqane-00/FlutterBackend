@@ -35,7 +35,7 @@ module.exports = {
             phone: phone,
           }).save();
           return res.status(201).json({
-            message: "User retrieved successfully",
+            message: "Order Placed successfully",
             data: order,
         });
         } else {
