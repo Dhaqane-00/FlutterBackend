@@ -87,8 +87,9 @@ order.post("/createOrder", createOrder);
  *                   description: Error message
  */
 
-
 order.get("/getUserOrder/:id", getUserOrder);
+
+order.get("/getOrders", getOrders);
 /**
  * @swagger
  * /api/order/getOrders:

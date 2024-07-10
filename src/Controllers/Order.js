@@ -34,8 +34,10 @@ module.exports = {
             note: note,
             phone: phone,
           }).save();
-
-          res.status(201).json(order);
+          return res.status(201).json({
+            message: "User retrieved successfully",
+            data: order,
+        });
         } else {
           // Handling payment failure
           return res.status(400).send({
