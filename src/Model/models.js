@@ -256,7 +256,7 @@ const OrderSchema = new mongoose.Schema(
         },
       ],
       total:Number,
-      phone:Number,
+      phone:String,
       note: String,
     },
     {
