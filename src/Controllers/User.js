@@ -17,6 +17,7 @@ exports.createUser = async (req, res) => {
     try {
         // Convert email to lowercase
         const lowerCaseEmail = email.toLowerCase();
+        
 
         // Check if user exists
         const existingUser = await User.findOne({ email: lowerCaseEmail });

@@ -1,6 +1,6 @@
 const express = require('express');
 const order = express.Router();
-const {createOrder,getOrders} = require('../Controllers/Order')
+const {createOrder,getOrders,getUserOrder} = require('../Controllers/Order')
 
 order.post("/createOrder", createOrder);
 /**
@@ -87,7 +87,8 @@ order.post("/createOrder", createOrder);
  *                   description: Error message
  */
 
-order.get("/getOrders", getOrders);
+
+order.get("/getUserOrder/:id", getUserOrder);
 /**
  * @swagger
  * /api/order/getOrders:
