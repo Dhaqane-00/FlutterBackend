@@ -47,7 +47,7 @@ module.exports = {
         }
       }
     } catch (e) {
-      res.status(400).json({ error: e.message });
+      res.status(401).json({ error: e.message });
     }
   },
 
